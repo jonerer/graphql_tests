@@ -33,7 +33,7 @@ var vehicleType = new graphql.GraphQLObjectType({
                     filter(perm => perm.vehicle === parent.id)[0].
                     permitted
 
-                console.log(parent, permission)
+                // console.log(parent, permission)
                 if (permission) {
                     return parent.position
                 } else {
