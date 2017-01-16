@@ -45,6 +45,7 @@ var vehicleType = new graphql.GraphQLObjectType({
     })
 })
 
+// https://github.com/mugli/learning-graphql/blob/master/7.%20Deep%20Dive%20into%20GraphQL%20Type%20System.md
 var queryType = new graphql.GraphQLObjectType({
     name: 'RootQueryType',
     fields: () => ({
@@ -55,6 +56,21 @@ var queryType = new graphql.GraphQLObjectType({
                 return vehicles
             }
         },
+        vehicle: {
+            type: vehicleType,
+            description: 'Single vehicle',
+            args: {
+                'vin': {
+                    type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+                }
+            },
+            resolve: (parent, args, ast) => {
+                var vehicle = vehicles.filter((vehicle) => {
+                    return vehicle.vin === args.vin
+                })
+                return vehicle[0]
+            }
+        }
     })
 })
 
@@ -96,7 +112,9 @@ app.use('/graphql', graphqlHTTP({
 }))
 
 app.get('/', (req, res) => {
-    res.send('hello')
+    res.send('Hello. You probably want this: <a href="/graphql">GraphiQL</a>')
 })
 
-app.listen(3000)
+app.listen(3000, () => {
+    console.log('Listening on 3000')
+})
